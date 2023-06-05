@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('CI') {
+            steps {
+
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                git 'https://github.com/mustafa-mohammed04/DevOps-CICD.git'
+                sh """
+                docker login -u ${USERNAME} -p ${PASSWORD}
+                cd /var/jenkins_home/workspace/dev-pipeline/backend-app
+                docker build . -f dockerfile  -t mustafa2498/nodejs-img:v2
+                docker push mustafa2498/nodejs-img:v2
+                """
+                
+                }
+            }
+        }
+
+         stage('CD') {
+            steps {
+                sh """
+                    cd /var/jenkins_home/workspace/dev-pipeline/App-K8s
+                    kubectl apply -f ns.yml
+                    kubectl apply -f .
+                    kubectl get all -n app-ns
+                """
+            }
+        }
+    }
+}
