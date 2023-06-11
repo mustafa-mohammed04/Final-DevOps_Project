@@ -21,7 +21,7 @@ module "vpc" {
 module "eks-cluster" {
     source = "./EKS"
     private-subnets-id = module.vpc.private-subnet-id
-    eks-cluster-name = "anubis-eksCluster"
+    eks-cluster-name = "my-eksCluster"
     eks_node_group-worker = "Gro-worker"
   
 }

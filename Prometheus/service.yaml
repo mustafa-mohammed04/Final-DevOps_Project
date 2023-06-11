@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: promethus-svc
+  namespace: promethus-ns
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster 
+  selector:
+    app: prometheus-server
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 9090
